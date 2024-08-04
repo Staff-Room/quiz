@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'quiz_page.dart'; // Import your QuizPage implementation
-import 'profile_page.dart'; // Import your ProfilePage implementation
+import 'package:provider/provider.dart';
+import 'package:mkcl_quiz/pages/quiz_page.dart'; // Import your QuizPage implementation
+import 'package:mkcl_quiz/pages/profile_page.dart'; // Import your ProfilePage implementation
+import 'package:mkcl_quiz/theme_provider.dart'; // Ensure the correct import
 
 class HomePage extends StatelessWidget {
   final List<Map<String, dynamic>> categories = [
@@ -14,16 +16,19 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: isDarkMode ? Colors.black : Colors.white,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               'MKCL QUIZ',
               style: TextStyle(
-                color: Colors.orange,
+                color: isDarkMode ? Colors.blue : Colors.orange,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -31,7 +36,7 @@ class HomePage extends StatelessWidget {
             Text(
               'Enrich your knowledge',
               style: TextStyle(
-                color: Colors.grey,
+                color: isDarkMode ? Colors.grey[300] : Colors.grey,
                 fontSize: 16,
               ),
             ),
@@ -40,7 +45,8 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications, color: Colors.blue),
+            icon: Icon(Icons.notifications,
+                color: isDarkMode ? Colors.white : Colors.blue),
             onPressed: () {
               Navigator.pushNamed(context, '/notifications');
             },
@@ -52,7 +58,8 @@ class HomePage extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             UserAccountsDrawerHeader(
-              decoration: BoxDecoration(color: Colors.blue),
+              decoration:
+                  BoxDecoration(color: isDarkMode ? Colors.black : Colors.blue),
               accountName: Text('User Name'),
               accountEmail: Text('user@example.com'),
               currentAccountPicture: GestureDetector(
@@ -72,46 +79,62 @@ class HomePage extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.notifications),
-              title: Text('Notifications'),
+              leading: Icon(Icons.notifications,
+                  color: isDarkMode ? Colors.white : null),
+              title: Text('Notifications',
+                  style: TextStyle(color: isDarkMode ? Colors.white : null)),
               onTap: () {
                 Navigator.pushNamed(context, '/notifications');
               },
             ),
             ListTile(
-              leading: Icon(Icons.star),
-              title: Text('Rate Us'),
+              leading:
+                  Icon(Icons.star, color: isDarkMode ? Colors.white : null),
+              title: Text('Rate Us',
+                  style: TextStyle(color: isDarkMode ? Colors.white : null)),
               onTap: () {
                 // Navigate to rate us page
               },
             ),
             ListTile(
-              leading: Icon(Icons.feedback),
-              title: Text('Feedback'),
+              leading:
+                  Icon(Icons.feedback, color: isDarkMode ? Colors.white : null),
+              title: Text('Feedback',
+                  style: TextStyle(color: isDarkMode ? Colors.white : null)),
               onTap: () {
                 Navigator.pushNamed(context, '/feedback');
               },
             ),
             ListTile(
-              leading: Icon(Icons.share),
-              title: Text('Share App'),
+              leading:
+                  Icon(Icons.share, color: isDarkMode ? Colors.white : null),
+              title: Text('Share App',
+                  style: TextStyle(color: isDarkMode ? Colors.white : null)),
               onTap: () {
                 // Implement share app functionality
               },
             ),
-            Divider(), // Add a divider before the Sign Out button
+            Divider(),
             ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Log Out'),
-              onTap: () {
-                // Add your logout functionality here
-              },
+              leading: Icon(Icons.brightness_6,
+                  color: isDarkMode ? Colors.white : null),
+              title: Text('Switch Theme',
+                  style: TextStyle(color: isDarkMode ? Colors.white : null)),
+              trailing: Switch(
+                value: isDarkMode,
+                onChanged: (value) {
+                  Provider.of<ThemeProvider>(context, listen: false)
+                      .toggleTheme();
+                },
+              ),
             ),
             ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text('Sign Out'),
+              leading:
+                  Icon(Icons.logout, color: isDarkMode ? Colors.white : null),
+              title: Text('Log Out',
+                  style: TextStyle(color: isDarkMode ? Colors.white : null)),
               onTap: () {
-                // Add your sign out functionality here
+                // Add your logout functionality here
               },
             ),
           ],
@@ -121,6 +144,7 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
+            SizedBox(height: 20),
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -177,7 +201,7 @@ class HomePage extends StatelessWidget {
                 },
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
             GestureDetector(
               onTap: () {
                 // Navigate to the test page or functionality
@@ -188,27 +212,17 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Container(
-                  width: double.infinity,
+                  width: 140,
                   padding: EdgeInsets.symmetric(vertical: 16),
+                  color: Color.fromARGB(255, 106, 221, 89),
                   child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.all_inclusive,
-                          color: Colors.grey,
-                          size: 30,
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'All',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      'Test',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

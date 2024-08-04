@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mkcl_quiz/pages/result_page.dart';
 
 class QuizPage extends StatefulWidget {
   final String category;
@@ -98,6 +99,7 @@ class _QuizPageState extends State<QuizPage> {
               startTimer();
             });
           },
+          selectedAnswers: [],
         ),
       ),
     );
@@ -116,6 +118,26 @@ class _QuizPageState extends State<QuizPage> {
     return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
   }
 
+  Color _getAppBarTextColor() {
+    // Define colors for different categories
+    switch (widget.category) {
+      case 'General Knowledge':
+        return Colors.red;
+      case 'Science':
+        return Colors.green;
+      case 'Mathematics':
+        return Colors.blue;
+      case 'History':
+        return Colors.orange;
+      case 'Geography':
+        return Colors.purple;
+      case 'Technology':
+        return Colors.teal;
+      default:
+        return Colors.black; // Default color if category is unknown
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,12 +145,14 @@ class _QuizPageState extends State<QuizPage> {
         title: Text(
           widget.category,
           style: TextStyle(
-            color: Colors.blue,
+            color: _getAppBarTextColor(),
             fontSize: 24.0,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? Colors.black
+            : Colors.white,
         elevation: 0,
       ),
       body: Padding(
@@ -217,53 +241,6 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                 ),
               ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ResultPage extends StatelessWidget {
-  final int totalQuestions;
-  final int correctAnswers;
-  final Function onRestartQuiz;
-
-  ResultPage({
-    required this.totalQuestions,
-    required this.correctAnswers,
-    required this.onRestartQuiz,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Quiz Results'),
-        backgroundColor: Colors.orange,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Quiz Completed!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Score: $correctAnswers / $totalQuestions',
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                onRestartQuiz();
-                Navigator.pop(context); // Return to quiz page
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-              child: Text('Restart Quiz'),
             ),
           ],
         ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:mkcl_quiz/theme_provider.dart'; // Ensure the correct import
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -14,17 +16,21 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Profile',
           style: TextStyle(
-            color: Colors.blue,
+            color: isDarkMode ? Colors.white : Colors.blue,
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
         ),
         centerTitle: true,
+        backgroundColor: isDarkMode ? Colors.black : Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -41,7 +47,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       : AssetImage('assets/default_profile.png')
                           as ImageProvider,
                   child: _profilePhotoUrl.isEmpty
-                      ? Icon(Icons.add_a_photo, size: 50)
+                      ? Icon(Icons.add_a_photo,
+                          size: 50,
+                          color: isDarkMode ? Colors.white : Colors.black)
                       : null,
                 ),
               ),
@@ -54,6 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onTap: () {
                 _editUsername(context);
               },
+              isDarkMode: isDarkMode,
             ),
             SizedBox(height: 16),
             _buildProfileItem(
@@ -63,6 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onTap: () {
                 _editEmail(context);
               },
+              isDarkMode: isDarkMode,
             ),
             SizedBox(height: 16),
             _buildProfileItem(
@@ -72,6 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onTap: () {
                 _selectDate(context);
               },
+              isDarkMode: isDarkMode,
             ),
             SizedBox(height: 16),
             _buildProfileItem(
@@ -83,6 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onTap: () {
                 _selectGender(context);
               },
+              isDarkMode: isDarkMode,
             ),
             SizedBox(height: 16),
             _buildProfileItem(
@@ -95,6 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
               ),
               subtitle: '',
+              isDarkMode: isDarkMode,
             ),
           ],
         ),
@@ -108,23 +121,33 @@ class _ProfilePageState extends State<ProfilePage> {
     required String subtitle,
     Widget? trailing,
     VoidCallback? onTap,
+    required bool isDarkMode,
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[200], // Background color of the container
-        border: Border.all(color: Colors.grey.shade300),
+        color: isDarkMode
+            ? Colors.grey[800]
+            : Colors.grey[200], // Background color of the container
+        border: Border.all(
+            color: isDarkMode ? Colors.grey[700]! : Colors.grey.shade300),
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
-        leading: Icon(icon),
+        leading: Icon(icon, color: isDarkMode ? Colors.white : Colors.black),
         title: Text(
           title,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
+            color: isDarkMode ? Colors.white : Colors.black,
           ),
         ),
-        subtitle: Text(subtitle),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(
+            color: isDarkMode ? Colors.grey[300] : Colors.black54,
+          ),
+        ),
         trailing: trailing,
         onTap: onTap,
       ),
